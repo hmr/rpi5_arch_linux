@@ -20,7 +20,7 @@ if [[ $(id -u) -ne 0 ]]; then
 fi
 
 ##### Confirmation
-read -r "All the data in ${SDDEV} will be deleted. Are you sure?"
+read -r "?All the data in ${SDDEV} will be deleted. Are you sure?"
 
 ##### Check installation
 PKGS=("curl" "libarchive-tools" "fdisk" "dosfstools" "e2fsprogs" "grep") 
