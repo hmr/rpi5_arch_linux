@@ -19,6 +19,12 @@ if [[ $(id -u) -ne 0 ]]; then
 	exit
 fi
 
+##### Check if the media is mounted
+if ! mount | grep -q "${SDDEV}"; then
+	echo "The target media is mounted"
+	exit
+fi
+
 ##### Confirmation
 echo "================================================================="
 echo "[WARNING] All the data in ${SDDEV} will be deleted. Are you sure?"
