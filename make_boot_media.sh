@@ -17,7 +17,10 @@ DOWNLOADDIR=/tmp/pi
 if [[ $(id -u) -ne 0 ]]; then
 	echo "Run this script as root"
 	exit
-fi	
+fi
+
+##### Confirmation
+read -r "All the data in ${SDDEV} will be deleted. Are you sure?"
 
 ##### Check installation
 PKGS=("curl" "libarchive-tools" "fdisk" "dosfstools" "e2fsprogs" "grep") 
@@ -34,7 +37,7 @@ DISTURL="http://os.archlinuxarm.org/os/${DISTPKG}"
 
 # RPIKPKG="$(curl -sL "http://mirror.archlinuxarm.org/aarch64/core/" | grep -oP "linux-rpi-16k-\d+\.\d+\.\d+-\d+-aarch64.pkg.tar.xz" | head -n 1)"
 RPIKPKG="$(curl -sL "http://mirror.archlinuxarm.org/aarch64/core/" | grep -oP "linux-rpi-\d+\.\d+\.\d+-\d+-aarch64.pkg.tar.xz" | head -n 1)"
-export RPIKRNLURL="http://mirror.archlinuxarm.org/aarch64/core/${RPIKPKG}"
+RPIKRNLURL="http://mirror.archlinuxarm.org/aarch64/core/${RPIKPKG}"
 
 echo "Arch Linux Image: ${DISTURL}"
 echo "Rpi Kernel Pkg  : ${RPIKRNLURL}"
