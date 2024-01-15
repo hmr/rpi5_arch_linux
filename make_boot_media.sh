@@ -75,16 +75,16 @@ EOF
 echo "Formatting ${SDPARTBOOT} as vfat"
 mkfs.vfat -F 32 $SDPARTBOOT
 echo
+
 ##### Format root partition
 echo "Formatting ${SDPARTROOT} as ext4"
 mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 -F $SDPARTROOT
-echo
 
 ##### Mount the partitions
-echo "Mounting root partition"
+echo "Mounting root partition as ${SDMOUNT}"
 mkdir -p ${SDMOUNT}
 mount ${SDPARTROOT} ${SDMOUNT}
-echo "Mounting boot partition"
+echo "Mounting boot partition as ${SDMOUNT}/boot"
 mkdir -p ${SDMOUNT}/boot
 mount ${SDPARTBOOT} ${SDMOUNT}/boot
 
@@ -97,19 +97,20 @@ echo "Deleting all the boot partition files"
 rm -rf ${SDMOUNT:?}/boot/*
 echo
 
-##### Add the Raspberry Pi Foundation's kernel
+##### Download Raspberry Pi Foundation's kernel package
 mkdir -p ${DOWNLOADDIR}/linux-rpi
-pushd ${DOWNLOADDIR}/linux-rpi
+pushd ${DOWNLOADDIR}/linux-rpi >& /dev/null
 if [[ ! -e ${RPIKPKG} ]]; then
 	echo "Downloading RPi kernel package"
 	curl -JLO "${RPIKRNLURL}"
 fi
 echo
 
+##### Untar the RPi kernel package
 echo "Extracting RPi kernel package files into ${SDMOUNT}/boot"
 tar xf "${RPIKPKG}"
 cp -rf boot/* ${SDMOUNT}/boot/
-popd
+popd >& /dev/null
 
 sync && umount -R "${SDMOUNT}"
 
