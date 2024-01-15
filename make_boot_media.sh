@@ -26,9 +26,9 @@ if mount | grep -q "${SDDEV}"; then
 fi
 
 ##### Confirmation
-echo "================================================================="
+echo "====================================================================="
 echo "[WARNING] All the data in ${SDDEV} will be deleted. Are you sure?"
-echo "================================================================="
+echo "====================================================================="
 read -r
 
 ##### Check installation
@@ -50,6 +50,7 @@ DISTURL="http://os.archlinuxarm.org/os/${DISTPKG}"
 RPIKPKG="$(curl -sL "http://mirror.archlinuxarm.org/aarch64/core/" | grep -oP "linux-rpi-\d+\.\d+\.\d+-\d+-aarch64.pkg.tar.xz" | head -n 1)"
 RPIKRNLURL="http://mirror.archlinuxarm.org/aarch64/core/${RPIKPKG}"
 
+echo
 echo "Arch Linux Image: ${DISTURL}"
 echo "Rpi Kernel Pkg  : ${RPIKRNLURL}"
 echo
@@ -109,8 +110,8 @@ pushd ${DOWNLOADDIR}/linux-rpi >& /dev/null
 if [[ ! -e ${RPIKPKG} ]]; then
 	echo "Downloading RPi kernel package"
 	curl -JLO "${RPIKRNLURL}"
+	echo
 fi
-echo
 
 ##### Untar the RPi kernel package
 echo "Extracting RPi kernel package files into ${SDMOUNT}/boot"
