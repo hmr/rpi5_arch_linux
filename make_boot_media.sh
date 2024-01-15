@@ -8,8 +8,8 @@ set -eu
 
 ##### Configuration
 SDDEV=/dev/mmcblk0
-SDPARTBOOT=/dev/mmcblk0p1
-SDPARTROOT=/dev/mmcblk0p2
+SDPARTBOOT="${SDDEV}p1"
+SDPARTROOT="${SDDEV}p2"
 SDMOUNT=/mnt/sd
 DOWNLOADDIR=/tmp/pi
 
@@ -25,7 +25,7 @@ for PKG in "${PKGS[@]}"; do
 	echo "Checking installation: ${PKG}"
 	if ! apt show "${PKG}" 2>/dev/null | grep -q "APT-Manual-Installed"; then
 		echo "Installing ${PKG}"
-		apt install -y ${PKG}
+		apt install -y "${PKG}"
 	fi
 done
 
@@ -76,15 +76,15 @@ bsdtar -xpf "${DOWNLOADDIR}/${DISTPKG}" -C "${SDMOUNT}"
 sync
 
 ##### Delete all the boot partition files
-rm -rf ${SDMOUNT}/boot/*
+rm -rf ${SDMOUNT:?}/boot/*
 
 ##### Add the Raspberry Pi Foundation's kernel
 mkdir -p ${DOWNLOADDIR}/linux-rpi
 pushd ${DOWNLOADDIR}/linux-rpi
-if [[ ! -e linux-rpi-*-aarch64.pkg.tar.xz ]]; then
+if [[ ! -e ${RPIKPKG} ]]; then
 	curl -JLO "${RPIKRNLURL}"
 fi
-tar xf *
+tar xf "${RPIKPKG}"
 cp -rf boot/* ${SDMOUNT}/boot/
 popd
 
